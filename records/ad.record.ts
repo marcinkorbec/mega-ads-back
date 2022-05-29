@@ -28,13 +28,21 @@ export class AdRecord implements AdEntity {
     }
 
     //@TODO: Check if URL is valid!
-    if(!obj.url || obj.url.length >100) {
+    if(!obj.url || obj.url.length > 100) {
       throw new ValidationError('Link ogłoszenia nie może być pusty, ani przekraczać 100 znaków');
     }
 
     if (typeof obj.lat !== 'number' || typeof obj.lon !== 'number') {
       throw new ValidationError('Nie można zlokalizować ogłoszenia.')
     }
+
+    this.name = obj.name;
+    this.description = obj.description;
+    this.id = obj.id;
+    this.price = obj.price;
+    this.lat = obj.lat;
+    this.lon = obj.lon;
+    this.url = obj.url;
   }
 
 }
