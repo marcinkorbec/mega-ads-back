@@ -1,11 +1,13 @@
 import {AdEntity} from "../types";
 import {ValidationError} from "../utils/error";
+import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
 
-interface NewAdEntity extends Omit<AdEntity, 'id'> {
-  id?: string;
-}
+
+type AdRecordResults = [AdEntity[], FieldPacket[]];
 
 export class AdRecord implements AdEntity {
+
   public description: string;
   public id: string;
   public lat: number;
@@ -15,11 +17,11 @@ export class AdRecord implements AdEntity {
   public url: string;
 
   constructor(obj: AdEntity) {
-    if(!obj.name || obj.name.length >100) {
+    if(!obj.name || obj.name.length > 100) {
       throw new ValidationError('Nazwa ogłoszenia nie może być krósza niż 1 znak i dłuższa niż 100 znaków');
     }
 
-    if(obj.description.length > 1024) {
+    if(obj.description.length > 1000) {
       throw new ValidationError('Treść ogłoszenia nie może przekraczać 1000 znaków');
     }
 
@@ -43,6 +45,14 @@ export class AdRecord implements AdEntity {
     this.lat = obj.lat;
     this.lon = obj.lon;
     this.url = obj.url;
+  }
+
+  static async getOne(id: string): Promise<AdRecord | null> {
+    const [results] = await pool.execute("SELECT * FROM `ads` where id = :id", {
+      id,
+    }) as AdRecordResults;
+
+    return results.length === 0 ? null : new AdRecord(results[0]);
   }
 
 }
