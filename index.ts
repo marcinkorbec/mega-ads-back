@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'express-async-errors'
 import {handleError} from "./utils/error";
 import rateLimit from 'express-rate-limit'
+import {adRouter} from "./routers/ad.router";
 
 const app = express();
 app.use(cors({
@@ -18,9 +19,7 @@ app.use(rateLimit({
 
 //Routes...
 
-app.get('/', async (req, res) => {
-  throw new Error('Oj no!');
-})
+app.use('/', adRouter);
 
 app.use(handleError);
 
