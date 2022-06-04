@@ -19,7 +19,7 @@ app.use(rateLimit({
 
 //Routes...
 
-app.use('/', adRouter);
+app.use('/ad', adRouter);
 
 app.use(handleError);
 
