@@ -31,8 +31,8 @@ export class AdRecord implements AdEntity {
     }
 
     //@TODO: Check if URL is valid!
-    if(!obj.url || obj.url.length > 100) {
-      throw new ValidationError('Link ogłoszenia nie może być pusty, ani przekraczać 100 znaków');
+    if(!obj.url || obj.url.length > 300) {
+      throw new ValidationError('Link ogłoszenia nie może być pusty, ani przekraczać 300 znaków');
     }
 
     if (typeof obj.lat !== 'number' || typeof obj.lon !== 'number') {
@@ -52,7 +52,7 @@ export class AdRecord implements AdEntity {
     const [results] = await pool.execute("SELECT * FROM `ads` where id = :id", {
       id,
     }) as AdRecordResults;
-    console.log(results)
+    // console.log(results)
     return results.length === 0 ? null : new AdRecord(results[0]);
   }
 
@@ -68,13 +68,12 @@ export class AdRecord implements AdEntity {
   }
 
   async insert(): Promise<void> {
-    if (this.id) {
+    if (!this.id) {
       this.id = uuid();
     } else {
       throw new Error('Cannot insert something that is already inserted.')
     }
 
     const [added] = await pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`,  `url`, `lat`, `lon`) VALUES(:id, :name, :description, :price, :url, :lat, :lon)", this)
-    console.log(added);
   }
 }
