@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Router} from 'express';
 import cors from 'cors';
 import 'express-async-errors'
 import {handleError} from "./utils/error";
@@ -19,7 +19,10 @@ app.use(rateLimit({
 
 //Routes...
 
-app.use('/ad', adRouter);
+const router = Router()
+
+router.use('/ad', adRouter);
+app.use('/api', router);
 
 app.use(handleError);
 
