@@ -95,7 +95,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
-#config/config.ts
+config/config.ts
 
 # Gatsby files
 .cache/
